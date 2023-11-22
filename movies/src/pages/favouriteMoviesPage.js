@@ -1,46 +1,48 @@
 import React, { useContext } from "react";
-import PageTemplate from "../components/templateMovieListPage";
 import { MoviesContext } from "../contexts/moviesContext";
 import { useQueries } from "react-query";
 import { getMovie } from "../api/tmdb-api";
-import Spinner from '../components/spinner'
-import RemoveFromFavorites from "../components/cardIcons/removeFromFavorites";
+import Spinner from "../components/spinner";
+import PageTemplate from "../components/templateMovieListPage";
+import RemoveFromFavourites from "../components/cardIcons/removeFromFavourites";
 import WriteReview from "../components/cardIcons/writeReview";
 
-const FavoriteMoviesPage = () => {
-  const {favorites: movieIds } = useContext(MoviesContext);
+const FavouriteMoviesPage = () => {
+  
+  const { favourites } = useContext(MoviesContext);
 
-  // Create an array of queries and run in parallel.
-  const favoriteMovieQueries = useQueries(
-    movieIds.map((movieId) => {
+  const favouriteMovieQueries = useQueries(
+    favourites.map((movieId) => {
       return {
         queryKey: ["movie", { id: movieId }],
         queryFn: getMovie,
       };
     })
   );
-  // Check if any of the parallel queries is still loading.
-  const isLoading = favoriteMovieQueries.find((m) => m.isLoading === true);
+
+  const isLoading = favouriteMovieQueries.find((m) => m.isLoading === true);
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  const movies = favoriteMovieQueries.map((q) => {
-    q.data.genre_ids = q.data.genres.map(g => g.id)
+  const movies = favouriteMovieQueries.map((q) => {
+    q.data.genre_ids = q.data.genres.map((g) => g.id)
     return q.data
   });
 
-  const toDo = () => true;
+  if (favourites.length === 0) {
+    return <h1>No Favourite Movies</h1>;
+  }
 
   return (
     <PageTemplate
-      title="Favorite Movies"
+      title="Favourite Movies"
       movies={movies}
       action={(movie) => {
         return (
           <>
-            <RemoveFromFavorites movie={movie} />
+            <RemoveFromFavourites movie={movie} />
             <WriteReview movie={movie} />
           </>
         );
@@ -49,4 +51,4 @@ const FavoriteMoviesPage = () => {
   );
 };
 
-export default FavoriteMoviesPage;
+export default FavouriteMoviesPage;

@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 
 const WriteReviewIcon = ({ movie }) => {
   return (
-    <Link
+    <Link 
       to={`/reviews/form`}
-      state={{
-          movieId: movie.id,
+      state= {{
+        movieId: movie.id,
       }}
-    >
+      >
       <RateReviewIcon color="primary" fontSize="large" />
-    </Link>
+      </Link>
   );
 };
 

@@ -41,3 +41,4 @@ function MovieListPageTemplate({ movies, title, action }) {
   );
 }
 export default MovieListPageTemplate;
+
